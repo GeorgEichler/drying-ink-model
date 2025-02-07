@@ -40,28 +40,29 @@ def non_periodic_boundary_fun(t, y, mu, h, boundary_condition):
 
     return dydt
 
-L = 1   #length of domain [0,L]
-N = 64  #number of grid points
+#domain size is essential for getting reasonable solutions
+L = 10   #length of domain [0,L]
+N = 128  #number of grid points
 h = L/N #grid spacing
 boundary_condition = [0, 0]
 
-x_grid = np.linspace(start = h, stop = L - h, num = N)
+x_grid = np.linspace(start = h/2, stop = L - h/2, num = N)
 
 #phi0 = -0.1*np.ones(N)
-#phi0 = np.concatenate([-0.1*np.ones(N//2),0.1*np.ones(N//2)])
+phi0 = np.concatenate([-0.1*np.ones(N//2),0.1*np.ones(N//2)])
 #phi0 = np.power(x_grid, 1) - 1/2
-phi0 = np.random.uniform(-0.1, 0.1, N)
+#phi0 = np.random.uniform(-0.1, 0.1, N)
 #phi0 = np.cos(2*np.pi*x_grid)
-#phi0 = np.tanh((x_grid - 0.5) * 10)
+#phi0 = np.tanh((x_grid - L/2) * 10)
 
 mu = 0 #moisture parameter
-t_span = [0, 1]
-t_eval = np.linspace(0, 1, 101)
+t_span = [0, 10]
+t_eval = np.linspace(0, 10, 101)
 
 #solution = solve_ivp(periodic_boundary_fun, t_span = t_span, y0 = phi0, method = "BDF", t_eval = t_eval, args = (mu,h))
 
 solution = solve_ivp(non_periodic_boundary_fun, t_span = t_span, y0 = phi0, method = "BDF",
-                     t_eval = t_eval, args = (mu,h, boundary_condition))
+                     t_eval = t_eval, args = (mu, h, boundary_condition))
 
 for i in range(0, 101, 20):
     plt.plot(x_grid, solution.y[:, i], label = f't = {i/(len(t_eval)-1)*t_span[1]:.2f}')
