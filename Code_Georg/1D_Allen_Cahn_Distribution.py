@@ -3,9 +3,9 @@ from dolfin import *
 import matplotlib.pyplot as plt
 
 # Parameters
-T = 10
-num_steps = 50      # Time intervall length
-dt = T / num_steps  # number of time steps
+T = 10              # Time intervall length
+num_steps = 50      # number of time steps
+dt = T / num_steps  # time step size
 mu = 0.0            # moisture parameter
 L = 10              # domain length [0,L]
 eps = 1e-1          # how much the ink likes to be in the solvent
