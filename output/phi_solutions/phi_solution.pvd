@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<VTKFile type="Collection" version="0.1">
+  <Collection>
+    <DataSet timestep="0" part="0" file="phi_solution000000.vtu" />
+    <DataSet timestep="0.20000000000000001" part="0" file="phi_solution000001.vtu" />
+    <DataSet timestep="0.40000000000000002" part="0" file="phi_solution000002.vtu" />
+    <DataSet timestep="0.60000000000000009" part="0" file="phi_solution000003.vtu" />
+    <DataSet timestep="0.80000000000000004" part="0" file="phi_solution000004.vtu" />
+    <DataSet timestep="1" part="0" file="phi_solution000005.vtu" />
+    <DataSet timestep="1.2000000000000002" part="0" file="phi_solution000006.vtu" />
+    <DataSet timestep="1.4000000000000001" part="0" file="phi_solution000007.vtu" />
+    <DataSet timestep="1.6000000000000001" part="0" file="phi_solution000008.vtu" />
+    <DataSet timestep="1.8" part="0" file="phi_solution000009.vtu" />
+    <DataSet timestep="2" part="0" file="phi_solution000010.vtu" />
+    <DataSet timestep="2.2000000000000002" part="0" file="phi_solution000011.vtu" />
+    <DataSet timestep="2.4000000000000004" part="0" file="phi_solution000012.vtu" />
+    <DataSet timestep="2.6000000000000001" part="0" file="phi_solution000013.vtu" />
+    <DataSet timestep="2.8000000000000003" part="0" file="phi_solution000014.vtu" />
+    <DataSet timestep="3" part="0" file="phi_solution000015.vtu" />
+    <DataSet timestep="3.2000000000000002" part="0" file="phi_solution000016.vtu" />
+    <DataSet timestep="3.4000000000000004" part="0" file="phi_solution000017.vtu" />
+    <DataSet timestep="3.6000000000000001" part="0" file="phi_solution000018.vtu" />
+    <DataSet timestep="3.8000000000000003" part="0" file="phi_solution000019.vtu" />
+    <DataSet timestep="4" part="0" file="phi_solution000020.vtu" />
+    <DataSet timestep="4.2000000000000002" part="0" file="phi_solution000021.vtu" />
+    <DataSet timestep="4.4000000000000004" part="0" file="phi_solution000022.vtu" />
+    <DataSet timestep="4.6000000000000005" part="0" file="phi_solution000023.vtu" />
+    <DataSet timestep="4.8000000000000007" part="0" file="phi_solution000024.vtu" />
+    <DataSet timestep="5" part="0" file="phi_solution000025.vtu" />
+    <DataSet timestep="5.2000000000000002" part="0" file="phi_solution000026.vtu" />
+    <DataSet timestep="5.4000000000000004" part="0" file="phi_solution000027.vtu" />
+    <DataSet timestep="5.6000000000000005" part="0" file="phi_solution000028.vtu" />
+    <DataSet timestep="5.8000000000000007" part="0" file="phi_solution000029.vtu" />
+    <DataSet timestep="6" part="0" file="phi_solution000030.vtu" />
+    <DataSet timestep="6.2000000000000002" part="0" file="phi_solution000031.vtu" />
+    <DataSet timestep="6.4000000000000004" part="0" file="phi_solution000032.vtu" />
+    <DataSet timestep="6.6000000000000005" part="0" file="phi_solution000033.vtu" />
+    <DataSet timestep="6.8000000000000007" part="0" file="phi_solution000034.vtu" />
+    <DataSet timestep="7" part="0" file="phi_solution000035.vtu" />
+    <DataSet timestep="7.2000000000000002" part="0" file="phi_solution000036.vtu" />
+    <DataSet timestep="7.4000000000000004" part="0" file="phi_solution000037.vtu" />
+    <DataSet timestep="7.6000000000000005" part="0" file="phi_solution000038.vtu" />
+    <DataSet timestep="7.8000000000000007" part="0" file="phi_solution000039.vtu" />
+    <DataSet timestep="8" part="0" file="phi_solution000040.vtu" />
+    <DataSet timestep="8.2000000000000011" part="0" file="phi_solution000041.vtu" />
+    <DataSet timestep="8.4000000000000004" part="0" file="phi_solution000042.vtu" />
+    <DataSet timestep="8.5999999999999996" part="0" file="phi_solution000043.vtu" />
+    <DataSet timestep="8.8000000000000007" part="0" file="phi_solution000044.vtu" />
+    <DataSet timestep="9" part="0" file="phi_solution000045.vtu" />
+    <DataSet timestep="9.2000000000000011" part="0" file="phi_solution000046.vtu" />
+    <DataSet timestep="9.4000000000000004" part="0" file="phi_solution000047.vtu" />
+    <DataSet timestep="9.6000000000000014" part="0" file="phi_solution000048.vtu" />
+    <DataSet timestep="9.8000000000000007" part="0" file="phi_solution000049.vtu" />
+  </Collection>
+</VTKFile>
