@@ -32,7 +32,7 @@ def D(x):
 # weak formulation of problem
 phi = Function(V)
 v = TestFunction(V)
-F_phi = (phi - phi_k)/dt*v*dx + inner(grad(phi), grad(v))*dx - (phi  - phi**3 - eps*n_k - mu)*v*dx
+F_phi = (phi - phi_k)/dt*v*dx + inner(grad(phi), grad(v))*dx - (phi  - phi**3 - eps*n_k + mu)*v*dx
 J_phi = derivative(F_phi, phi)
 
 n = Function(V)
