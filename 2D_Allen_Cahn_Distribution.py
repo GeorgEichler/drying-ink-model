@@ -3,11 +3,15 @@ import fenics as fe
 import matplotlib.pyplot as plt
 import os
 
+# Option if results should be stored
+store_values = False
+
 # Create output directories
-output_dir_phi = "output/phi_solutions"
-output_dir_n = "output/n_solutions"
-os.makedirs(output_dir_phi, exist_ok=True)
-os.makedirs(output_dir_n, exist_ok=True)
+if store_values:
+    output_dir_phi = "output/phi_solutions"
+    output_dir_n = "output/n_solutions"
+    os.makedirs(output_dir_phi, exist_ok=True)
+    os.makedirs(output_dir_n, exist_ok=True)
 
 # Parameter
 T = 10                # time interval length
@@ -24,8 +28,15 @@ nx, ny = 50, 50
 mesh = fe.RectangleMesh(fe.Point(0,0), fe.Point(L,L), nx, ny)
 V = fe.FunctionSpace(mesh, "Lagrange", 1)
 
+# random initial conditions
+random_values = np.random.uniform(-0.1, 0.1, (nx+1,ny+1))
+phi_init = fe.Function(V)
+phi_init.vector()[:] = random_values.flatten()
+
+phi_k = fe.interpolate(phi_init, V)
+
 # Initial condotions for phi and n
-phi_k = fe.interpolate(fe.Expression("0.2*cos(pi*(x[0]+x[1])/5)", degree=2),V)
+#phi_k = fe.interpolate(fe.Expression("0.2*cos(pi*(x[0]+x[1])/5)", degree=2),V)
 phi_0 = phi_k.copy(deepcopy=True)
 
 n_k = fe.interpolate(fe.Expression("0.1*exp(-pow(x[0]-L/2, 2)/0.01) * exp(-pow(x[1]-L/2, 2)/0.01)", L=L, degree=2), V)
@@ -58,8 +69,9 @@ problem_n = fe.NonlinearVariationalProblem(F_n, n, J=J_n)
 solver_n = fe.NonlinearVariationalSolver(problem_n)
 
 # Create output files for ParaView
-phi_file = fe.File(os.path.join(output_dir_phi, "phi_solution.pvd"))
-n_file = fe.File(os.path.join(output_dir_n, "n_solution.pvd"))
+if store_values:
+    phi_file = fe.File(os.path.join(output_dir_phi, "phi_solution.pvd"))
+    n_file = fe.File(os.path.join(output_dir_n, "n_solution.pvd"))
 
 # Time-stepping loop
 phi_solutions = [phi_0]
@@ -70,11 +82,13 @@ times_to_plot = [0, num_steps // 2, num_steps - 1]
 for i in range(num_steps):
     solver_phi.solve()
     phi_k.assign(phi)
-    phi_file << (phi, i * dt)
+    if store_values:
+        phi_file << (phi, i * dt)
 
     solver_n.solve()
     n_k.assign(n)
-    n_file << (n, i * dt)
+    if store_values:
+        n_file << (n, i * dt)
 
     if i in times_to_plot:
         phi_solutions.append(phi.copy(deepcopy=True))
