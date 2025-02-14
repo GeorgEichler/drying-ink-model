@@ -1,5 +1,6 @@
 import numpy as np
 import fenics as fe
+import ufl #needed to use exp, tanh etc. function for fenics code
 import matplotlib.pyplot as plt
 import os
 
@@ -43,7 +44,8 @@ n_k = fe.interpolate(fe.Expression("0.1*exp(-pow(x[0]-L/2, 2)/0.01) * exp(-pow(x
 n_0 = n_k.copy(deepcopy=True)
 
 # Define mobility function
-D = lambda phi: (1 + phi)**3
+#D = lambda phi: (1 + phi)**3
+D = lambda phi: (1 + ufl.tanh(10*phi))
 
 # Define variational formulation
 phi = fe.Function(V)
