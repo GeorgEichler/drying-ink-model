@@ -129,6 +129,7 @@ for idx, t_idx in enumerate(times_to_plot):
     c_phi = fe.plot(phi_solutions[idx], mode="color")
     c_phi.set_cmap(cmap)
     axes[0, idx].set_title(f"phi at t={t_idx*dt}")
+    plt.colorbar(c_phi, ax=axes[0, idx])
 
     plt.sca(axes[1, idx])
     c_n = fe.plot(n_solutions[idx], mode="color")
