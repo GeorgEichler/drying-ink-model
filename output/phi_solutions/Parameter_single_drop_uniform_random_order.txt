@@ -1,0 +1,11 @@
+
+    Simulation Parameter:
+    ---------------------
+    Total time: 10
+    Time step number: 50
+    Time step size: 0.2
+    Moisture parameter (mu): 0.0
+    Domain length: 10
+    Ink solvent interaction (eps) -0.1
+    Evaporation coefficient * surface tension = M * sigma = 0.006
+    Mesh Resolution: 10 x 10
