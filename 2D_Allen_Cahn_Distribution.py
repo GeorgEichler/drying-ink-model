@@ -103,7 +103,7 @@ if store_values:
 phi_solutions = [phi_0]
 n_solutions = [n_0]
 
-times_to_plot = [0, num_steps // 2, num_steps - 1]
+times_to_plot = [0, num_steps // 2, num_steps]
 
 for i in range(num_steps):
     solver_phi.solve()
