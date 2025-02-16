@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Option if results should be stored
-store_values = False
+store_values = True
 
 # Create output directories
 if store_values:
@@ -16,18 +16,21 @@ if store_values:
 
 # Parameter
 T = 10                # time interval length
-num_steps = 50        # number of time steps
+num_steps = 100        # number of time steps
 dt = T / num_steps    # time step size
 mu = 0.0              # moisture parameter
-L = 10                # domain length [0,L]x[0,L]
+L = 25                # domain length [0,L]x[0,L]
 
-eps = 1e-1            # ink-solvent interaction parameter
+eps = -1e-1            # ink-solvent interaction parameter
 alpha = 0.2 * 0.03    # Product of evaporation coefficient (M) and surface tension (sigma)
 
 # Create mesh and funcion space
-nx, ny = 50, 50
+nx, ny = 100, 100
 mesh = fe.RectangleMesh(fe.Point(0,0), fe.Point(L,L), nx, ny)
 V = fe.FunctionSpace(mesh, "Lagrange", 1)
+
+# name for txt document to store parameter values
+txt_name = "Parameter_single_drop_uniform_random_order.txt"
 
 # random initial conditions
 random_values = np.random.uniform(-0.1, 0.1, (nx+1,ny+1))
@@ -74,6 +77,27 @@ solver_n = fe.NonlinearVariationalSolver(problem_n)
 if store_values:
     phi_file = fe.File(os.path.join(output_dir_phi, "phi_solution.pvd"))
     n_file = fe.File(os.path.join(output_dir_n, "n_solution.pvd"))
+
+    # Parameters or txt file
+    params = f"""
+    Simulation Parameter:
+    ---------------------
+    Total time: {T}
+    Time step number: {num_steps}
+    Time step size: {dt}
+    Moisture parameter (mu): {mu}
+    Domain length: {L}
+    Ink solvent interaction (eps) {eps}
+    Evaporation coefficient * surface tension = M * sigma = {alpha}
+    Mesh Resolution: {nx} x {ny}"""
+
+    param_file_phi = os.path.join(output_dir_phi, txt_name)
+    param_file_n = os.path.join(output_dir_n, txt_name)
+
+    with open(param_file_phi, "w") as f:
+        f.write(params)
+    with open(param_file_n, "w") as f:
+        f.write(params)
 
 # Time-stepping loop
 phi_solutions = [phi_0]
