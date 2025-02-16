@@ -134,6 +134,7 @@ for idx, t_idx in enumerate(times_to_plot):
     c_n = fe.plot(n_solutions[idx], mode="color")
     c_n.set_cmap(cmap)
     axes[1, idx].set_title(f"n at t={t_idx*dt}")
+    plt.colorbar(c_n, ax=axes[1, idx])
 
 plt.tight_layout()
 plt.show()
