@@ -9,7 +9,7 @@ class Config:
         self.L = domain_length
         self.num_steps = num_steps
         self.T = time_interval
-        self.dt = self.time_interval/self.num_steps
+        self.dt = self.T/self.num_steps
         self.mu = mu
         self.eps = eps
         self.alpha = M * sigma
@@ -42,7 +42,7 @@ class Config:
         return phi_init
         
     def set_ics(self, phi_option, n_option):
-        phi_init = fe.interpolate(self.phi_options[phi_option])
-        n_init = fe.interpolate(self.n_options[n_option])
+        phi_init = fe.interpolate(self.phi_options[phi_option], self.V)
+        n_init = fe.interpolate(self.n_options[n_option], self.V)
 
         return phi_init, n_init
