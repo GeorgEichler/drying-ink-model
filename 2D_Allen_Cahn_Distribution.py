@@ -30,7 +30,7 @@ mesh = fe.RectangleMesh(fe.Point(0,0), fe.Point(L,L), nx, ny)
 V = fe.FunctionSpace(mesh, "Lagrange", 1)
 
 # name for txt document to store parameter values
-txt_name = "Parameter_single_cross_drop_uniform_random_order.txt"
+txt_name = "Parameter_values.txt"
 
 # random initial conditions
 random_values = np.random.uniform(-0.1, 0.1, (nx+1,ny+1))
@@ -46,8 +46,8 @@ phi_0 = phi_k.copy(deepcopy=True)
 # sincle spike/drop distribution
 n_k = fe.interpolate(fe.Expression("0.1*exp(-pow(x[0]-L/2, 2)/0.01) * exp(-pow(x[1]-L/2, 2)/0.01)", L=L, degree=2), V)
 # cross distribution
-n_k = fe.interpolate(fe.Expression("0.1*exp(-pow(x[0] + x [1] - L, 2)/0.1) * exp(-pow(x[0] - x[1],2)/0.01) + \
-                                   0.1*exp(-pow(x[0] + x[1] - L,2)/0.01) * exp(-pow(x[0] - x[1],2)/0.1)", L=L, degree=2), V)
+n_k = fe.interpolate(fe.Expression("0.1*exp(-pow(x[0] + x[1] - 2*L, 2)/(2*0.1)) * exp(-pow(x[0] - x[1], 2)/(2*0.1))", L=L, degree=2), V)
+
 n_0 = n_k.copy(deepcopy=True)
 
 # Define mobility function
