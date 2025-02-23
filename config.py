@@ -12,7 +12,7 @@ class Config:
         self.dt = self.time_interval/self.num_steps
         self.mu = mu
         self.eps = eps
-        self.M = M * sigma
+        self.alpha = M * sigma
         self.c_phi = constant_phi
         self.c_n = constant_n
 
