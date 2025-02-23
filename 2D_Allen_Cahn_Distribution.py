@@ -1,4 +1,3 @@
-import numpy as np
 import fenics as fe
 import ufl #needed to use exp, tanh etc. function for fenics code
 import matplotlib.pyplot as plt
