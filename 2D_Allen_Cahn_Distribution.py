@@ -3,6 +3,8 @@ import ufl #needed to use exp, tanh etc. function for fenics code
 import matplotlib.pyplot as plt
 import config as cfg
 import os
+from plot_results import plot_heatmaps
+
 
 # Option if results should be stored
 store_values = True
@@ -101,22 +103,4 @@ for i in range(config.num_steps):
         phi_solutions.append(phi.copy(deepcopy=True))
         n_solutions.append(n.copy(deepcopy=True))
 
-# Visualisation
-fig, axes = plt.subplots(2, len(times_to_plot), figsize=(15, 6))
-cmap = "coolwarm"
-
-for idx, t_idx in enumerate(times_to_plot):
-    plt.sca(axes[0, idx])
-    c_phi = fe.plot(phi_solutions[idx], mode="color")
-    c_phi.set_cmap(cmap)
-    axes[0, idx].set_title(f"phi at t={t_idx*config.dt}")
-    plt.colorbar(c_phi, ax=axes[0, idx])
-
-    plt.sca(axes[1, idx])
-    c_n = fe.plot(n_solutions[idx], mode="color")
-    c_n.set_cmap(cmap)
-    axes[1, idx].set_title(f"n at t={t_idx*config.dt}")
-    plt.colorbar(c_n, ax=axes[1, idx])
-
-plt.tight_layout()
-plt.show()
+plot_heatmaps(phi_solutions, n_solutions, times_to_plot, config.dt)
