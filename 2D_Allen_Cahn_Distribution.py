@@ -21,11 +21,18 @@ txt_name = "Parameter_values.txt"
 
 
 phi_init_option = "gaussian"
-n_init_option = "gaussian"
+n_init_option = "cross_gaussian"
+
+n_low_threshold = 0.2
+n_high_threshold = 0.7
 
 # Define mobility function
 #D = lambda phi: (1 + phi)**3
-D = lambda phi: (1 + ufl.tanh(10*phi))
+def D(phi, n):
+    return 0.5*(1 + ufl.tanh(10*phi)) * (1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))
+D = lambda phi: 0.5*(1 + ufl.tanh(10*phi))
+
+
 
 config = cfg.Config()
 
