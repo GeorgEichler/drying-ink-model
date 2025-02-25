@@ -21,20 +21,20 @@ txt_name = "Parameter_values.txt"
 
 
 phi_init_option = "gaussian"
-n_init_option = "cross_gaussian"
+n_init_option = "gaussian"
 
-n_low_threshold = 0.2
-n_high_threshold = 0.7
+n_low_threshold = 0.5
+n_high_threshold = 1
 
 # Define mobility function
 #D = lambda phi: (1 + phi)**3
 def D(phi, n):
     return 0.5*(1 + ufl.tanh(10*phi)) * (1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))
-D = lambda phi: 0.5*(1 + ufl.tanh(10*phi))
+#D = lambda phi: 0.5*(1 + ufl.tanh(10*phi))
 
 
 
-config = cfg.Config()
+config = cfg.Config(mu = -0.1)
 
 phi_k, n_k = config.set_ics(phi_init_option, n_init_option)
 phi_0 = phi_k.copy(deepcopy = True)
@@ -53,7 +53,7 @@ J_phi = fe.derivative(F_phi, phi)
 
 # Ink distribution diffusion equation
 F_n = ((n - n_k) / config.dt) * v * fe.dx \
-      + (1/config.alpha) * D(phi) * fe.inner(fe.grad(n) + config.eps * n * fe.grad(phi), fe.grad(v)) * fe.dx
+      + (1/config.alpha) * D(phi,n) * fe.inner(fe.grad(n) + config.eps * n * fe.grad(phi), fe.grad(v)) * fe.dx
 J_n = fe.derivative(F_n, n)
 
 # Set up solvers
@@ -63,10 +63,25 @@ solver_phi = fe.NonlinearVariationalSolver(problem_phi)
 problem_n = fe.NonlinearVariationalProblem(F_n, n, J=J_n)
 solver_n = fe.NonlinearVariationalSolver(problem_n)
 
+#initial values
+phi_solutions = [phi_0]
+n_solutions = [n_0]
+
+times_to_plot = [0, config.num_steps // 2, config.num_steps]
+
+
 # Create output files for ParaView
 if store_values:
-    phi_file = fe.File(os.path.join(output_dir_phi, "phi_solution.pvd"))
-    n_file = fe.File(os.path.join(output_dir_n, "n_solution.pvd"))
+    phi_xdmf = fe.XDMFFile(os.path.join(output_dir_phi, "phi_solution.xdmf"))
+    n_xdmf = fe.XDMFFile(os.path.join(output_dir_n, "n_solution.xdmf"))
+    
+    phi_xdmf.parameters["flush_output"] = True
+    n_xdmf.parameters["flush_output"] = True
+    phi_xdmf.parameters["functions_share_mesh"] = True
+    n_xdmf.parameters["functions_share_mesh"] = True
+
+    phi_xdmf.write(phi_k, 0)
+    n_xdmf.write(n_k, 0)
 
     # Parameters or txt file
     params = f"""
@@ -89,25 +104,25 @@ if store_values:
     with open(param_file_n, "w") as f:
         f.write(params)
 
-# Time-stepping loop
-phi_solutions = [phi_0]
-n_solutions = [n_0]
-
-times_to_plot = [0, config.num_steps // 2, config.num_steps]
 
 for i in range(config.num_steps):
+    t = (i+1)*config.dt
     solver_phi.solve()
     phi_k.assign(phi)
     if store_values:
-        phi_file << (phi, i * config.dt)
+        phi_xdmf.write(phi_k, t)
 
     solver_n.solve()
     n_k.assign(n)
     if store_values:
-        n_file << (n, i * config.dt)
+        n_xdmf.write(n_k, t)
 
     if i in times_to_plot:
         phi_solutions.append(phi.copy(deepcopy=True))
         n_solutions.append(n.copy(deepcopy=True))
+
+if store_values:
+    phi_xdmf.close()
+    n_xdmf.close()
 
 plot_heatmaps(phi_solutions, n_solutions, times_to_plot, config.dt)
