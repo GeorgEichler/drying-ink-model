@@ -4,7 +4,7 @@
     Total time: 10
     Time step number: 50
     Time step size: 0.2
-    Moisture parameter (mu): 0.0
+    Moisture parameter (mu): -0.1
     Domain length: 25
     Ink solvent interaction (eps) -1
     Evaporation coefficient * surface tension = M * sigma = 0.006
