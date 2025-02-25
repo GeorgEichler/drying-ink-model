@@ -23,15 +23,16 @@ class Config:
         self.phi_options = {
             "constant": fe.Constant(self.c_phi),
             "sine_checkerboard": fe.Expression("sin(x[0])*sin(x[1])", degree=2),
-            "gaussian": fe.Expression("0.1*exp(-pow(x[0]-L/2, 2)/0.01) * exp(-pow(x[1]-L/2, 2)/0.01)", L=self.L, degree=2),
+            "gaussian": fe.Expression("0.3*exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/0.1)", L=self.L, degree=2),
             "random": self.random()
         }
 
         self.n_options = {
             "constant": fe.Constant(self.c_n),
-            "gaussian": fe.Expression("0.1*exp(-pow(x[0]-L/2, 2)/0.01) * exp(-pow(x[1]-L/2, 2)/0.01)", L=self.L, degree=2),
+            "gaussian": fe.Expression("0.3*exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/0.1)", L=self.L, degree=2),
             "cross_gaussian": fe.Expression("0.1 * exp(-(pow(x[0] - L/2, 2) + pow(x[1] - L/2, 2))) * (exp(-pow(x[0] + x[1] - L, 2)/(2*0.1)) + exp(-pow(x[0] - x[1], 2)/(2*0.1)))",
                                     L=self.L, degree=2),
+            "sine_checkerboard": fe.Expression("sin(x[0])*sin(x[1])", degree=2),
             "half_domain": fe.Expression("x[0] < L/2 ? 0.2 : 0", L=self.L, degree=1)
         }
 
