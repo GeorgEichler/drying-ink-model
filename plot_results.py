@@ -1,4 +1,5 @@
 import fenics as fe
+import numpy as np
 import matplotlib.pyplot as plt
 
 def plot_heatmaps(phi_solutions, n_solutions, times_to_plot, dt):
@@ -20,4 +21,34 @@ def plot_heatmaps(phi_solutions, n_solutions, times_to_plot, dt):
         plt.colorbar(c_n, ax=axes[1, idx])
     
     plt.tight_layout()
+    plt.show()
+
+def plot_free_energy(free_enrgy_vals, dt, num_steps):
+    plt.figure(figsize=(12, 6))
+    plt.plot([dt * k for k in range(num_steps)], free_enrgy_vals)
+    plt.xlabel("Time t")
+    plt.ylabel("Free Energy F")
+    plt.title("Evolution of free energy")
+
+    plt.show()
+
+def plot_horizontal_slice_n(n_solutions, L, timestamps, ycoord, num_x_points):
+    """
+    Horizontal slice of the ink distribution n
+    n: ink distribution solution
+    L: domain length
+    timestamps: times of slices
+    ycoord: y coordinate where the horizontal slice starts
+    num_x_points: number of points along the horizontal slice
+    """
+
+    xvals = np.linspace(0, L, num_x_points)
+    n_vals = []
+    plt.figure()
+    for i in range(len(n_solutions)):
+        n_vals.append([n_solutions[i](xvals[j], ycoord) for j in range(len(xvals))])
+        plt.plot(xvals, n_vals[i], label=f"t={round(timestamps[i], 2)}")
+    plt.xlabel("x")
+    plt.ylabel("n")
+    plt.legend()
     plt.show()
