@@ -1,4 +1,5 @@
 import fenics as fe
+import ufl
 import numpy as np
 
 class Config:
@@ -6,7 +7,7 @@ class Config:
                  mu = 0.0, eps = -1, M = 0.2, sigma = 0.03, constant_phi = 0, constant_n = 0):
 
         self.grid = grid
-        self.L = domain_length
+        self.L = domain_length     #length of domain [0,L]^2
         self.num_steps = num_steps
         self.T = time_interval
         self.dt = self.T/self.num_steps
@@ -47,3 +48,9 @@ class Config:
         n_init = fe.interpolate(self.n_options[n_option], self.V)
 
         return phi_init, n_init
+    
+    #mobility function
+    def D(self, phi, n):
+        n_low_threshold = 0.5
+        n_high_threshold = 1
+        return 0.5*(1 + ufl.tanh(10*phi)) * (1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))

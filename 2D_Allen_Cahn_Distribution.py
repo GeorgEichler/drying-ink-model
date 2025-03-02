@@ -25,13 +25,6 @@ n_init_option = "gaussian"
 n_low_threshold = 0.5
 n_high_threshold = 1
 
-# Define mobility function
-#D = lambda phi: (1 + phi)**3
-def D(phi, n):
-    return 0.5*(1 + ufl.tanh(10*phi)) * (1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))
-#D = lambda phi: 0.5*(1 + ufl.tanh(10*phi))
-
-
 
 config = cfg.Config(mu = -0.1)
 
@@ -52,7 +45,7 @@ J_phi = fe.derivative(F_phi, phi)
 
 # Ink distribution diffusion equation
 F_n = ((n - n_k) / config.dt) * v * fe.dx \
-      + (1/config.alpha) * D(phi,n) * fe.inner(fe.grad(n) + config.eps * n * fe.grad(phi), fe.grad(v)) * fe.dx
+      + (1/config.alpha) * config.D(phi,n) * fe.inner(fe.grad(n) + config.eps * n * fe.grad(phi), fe.grad(v)) * fe.dx
 J_n = fe.derivative(F_n, n)
 
 # Set up solvers
