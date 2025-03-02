@@ -1,6 +1,5 @@
 import fenics as fe
 import ufl #needed to use exp, tanh etc. function for fenics code
-import matplotlib.pyplot as plt
 import config as cfg
 import os
 from plot_results import plot_heatmaps
@@ -72,6 +71,7 @@ times_to_plot = [0, config.num_steps // 2, config.num_steps]
 
 # Create output files for ParaView
 if store_values:
+    """
     phi_xdmf = fe.XDMFFile(os.path.join(output_dir_phi, "phi_solution.xdmf"))
     n_xdmf = fe.XDMFFile(os.path.join(output_dir_n, "n_solution.xdmf"))
     
@@ -82,6 +82,10 @@ if store_values:
 
     phi_xdmf.write(phi_k, 0)
     n_xdmf.write(n_k, 0)
+    """
+
+    phi_file = fe.File(os.path.join(output_dir_phi, "phi_solution.pvd"))
+    n_file = fe.File(os.path.join(output_dir_n, "n_solution.pvd"))
 
     # Parameters or txt file
     params = f"""
@@ -110,19 +114,21 @@ for i in range(config.num_steps):
     solver_phi.solve()
     phi_k.assign(phi)
     if store_values:
-        phi_xdmf.write(phi_k, t)
+        #phi_xdmf.write(phi_k, t)
+        phi_file << (phi, i * config.dt)
 
     solver_n.solve()
     n_k.assign(n)
     if store_values:
-        n_xdmf.write(n_k, t)
+        #n_xdmf.write(n_k, t)
+        n_file << (n, i * config.dt)
 
     if i in times_to_plot:
         phi_solutions.append(phi.copy(deepcopy=True))
         n_solutions.append(n.copy(deepcopy=True))
 
-if store_values:
-    phi_xdmf.close()
-    n_xdmf.close()
+#if store_values:
+#    phi_xdmf.close()
+#    n_xdmf.close()
 
 plot_heatmaps(phi_solutions, n_solutions, times_to_plot, config.dt)
