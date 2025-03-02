@@ -1,8 +1,8 @@
 import fenics as fe
-#import ufl #needed to use exp, tanh etc. function for fenics code
+import ufl #needed to use exp, tanh etc. function for fenics code
 import config as cfg
 import os
-from plot_results import plot_heatmaps
+from plot_results import plot_heatmaps, plot_free_energy, plot_horizontal_slice_n
 
 # Option if results should be stored
 store_values = True
@@ -47,6 +47,11 @@ F_n = ((n - n_k) / config.dt) * v * fe.dx \
       + (1/config.alpha) * config.D(phi,n) * fe.inner(fe.grad(n) + config.eps * n * fe.grad(phi), fe.grad(v)) * fe.dx
 J_n = fe.derivative(F_n, n)
 
+# Define the free energy
+free_energy = (-(phi**2)/2 + (phi**4)/4 + 1/2*fe.inner(fe.grad(phi), fe.grad(phi)) \
+               - config.mu*phi + config.eps*n*phi + n*(ufl.ln(n) - 1))*fe.dx
+
+
 # Set up solvers
 problem_phi = fe.NonlinearVariationalProblem(F_phi, phi, J=J_phi)
 solver_phi = fe.NonlinearVariationalSolver(problem_phi)
@@ -57,6 +62,7 @@ solver_n = fe.NonlinearVariationalSolver(problem_n)
 #initial values
 phi_solutions = [phi_0]
 n_solutions = [n_0]
+free_energy_vals = []
 
 times_to_plot = [0, config.num_steps // 2, config.num_steps]
 
@@ -119,8 +125,12 @@ for i in range(config.num_steps):
         phi_solutions.append(phi.copy(deepcopy=True))
         n_solutions.append(n.copy(deepcopy=True))
 
+    free_energy_vals.append(fe.assemble(free_energy))
+
 #if store_values:
 #    phi_xdmf.close()
 #    n_xdmf.close()
 
 plot_heatmaps(phi_solutions, n_solutions, times_to_plot, config.dt)
+plot_free_energy(free_energy_vals, config.dt, config.num_steps)
+plot_horizontal_slice_n(n, config.L, times_to_plot, 12.5, 100)
