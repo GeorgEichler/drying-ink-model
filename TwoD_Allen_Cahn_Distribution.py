@@ -1,9 +1,8 @@
 import fenics as fe
-import ufl #needed to use exp, tanh etc. function for fenics code
+#import ufl #needed to use exp, tanh etc. function for fenics code
 import config as cfg
 import os
 from plot_results import plot_heatmaps
-
 
 # Option if results should be stored
 store_values = True
