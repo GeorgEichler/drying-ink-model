@@ -2,7 +2,7 @@ import fenics as fe
 import ufl #needed to use exp, tanh etc. function for fenics code
 import config as cfg
 import os
-from plot_results import plot_heatmaps, plot_free_energy, plot_horizontal_slice_n
+import plot_results as plot
 
 # Option if results should be stored
 store_values = True
@@ -131,6 +131,11 @@ for i in range(config.num_steps):
 #    phi_xdmf.close()
 #    n_xdmf.close()
 
-plot_heatmaps(phi_solutions, n_solutions, times_to_plot, config.dt)
-plot_free_energy(free_energy_vals, config.dt, config.num_steps)
-plot_horizontal_slice_n(n, config.L, times_to_plot, 12.5, 100)
+figure_handler = plot.FigureHandler(config)
+save_heatmap = True
+save_free_energy = True
+save_slices = True
+
+figure_handler.plot_heatmaps(phi_solutions, n_solutions, times_to_plot, save_heatmap)
+figure_handler.plot_free_energy(free_energy_vals, save_free_energy)
+figure_handler.plot_horizontal_slice_n(n_solutions, times_to_plot, 12.5, 100, save_slices)
