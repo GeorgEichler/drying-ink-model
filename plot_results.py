@@ -35,7 +35,7 @@ class FigureHandler:
             c_phi.set_cmap(phi_cmap)
             plt.xlabel("x")
             plt.ylabel("y")
-            plt.title(rf"\phi at t = {round(times_to_plot[k], 2)}")
+            plt.title(rf"$\phi$ at t = {round(times_to_plot[k], 2)}")
             plt.colorbar(c_phi)
             if savefig:
                 plt.savefig(f"{solutions_path}/phi_t={round(times_to_plot[k],2)}.png")
