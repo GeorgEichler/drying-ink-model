@@ -9,15 +9,15 @@ An usual choice for the free energy is $f = f_1 = -1/2 \phi^2 + 1/4 \phi^4$ whic
 
 A second field $n(x,t)$ describes the distribution of the ink particle on the surface and is modelled by an **diffusion equation** of the form
 <p align=center> 
-$\frac{\partial n}{\partial t} = \nabla \cdot \left( D(n) (\nabla n + \epsilon n \nabla n) \right),$
+$\frac{\partial n}{\partial t} = \nabla \cdot \left( D(n,\phi) (\nabla n + \epsilon n \nabla n) \right),$
 </p>
 
-where $D(n)$ is the particle mobility, $\epsilon$ models how much the ink particle likes to be in the solvent. In this case our free energy needs to be updated to $f=f_1 + \epsilon n \phi$. 
+where $D(n,\phi)$ is the particle mobility, $\epsilon$ models how much the ink particle likes to be in the solvent. In this case our free energy needs to be updated to $f=f_1 + \epsilon n \phi$. 
 Applying the following transformations $x = \sqrt{\sigma} x^\*$, $t = t^\*/M$ and letting $\alpha := M \sigma$, we obtain
 
 <p align=center>
   $\frac{\partial \phi}{\partial t} = \Delta \phi + \phi - \phi^3 - n \epsilon + \mu  $
 <p>
 <p align=center>
-  $\frac{\partial n}{\partial t} = \frac{1}{\alpha} \cdot \nabla \cdot \left( D(n) \cdot (\nabla n + \epsilon n \nabla n) \right)$
+  $\frac{\partial n}{\partial t} = \frac{1}{\alpha} \cdot \nabla \cdot \left( D(n,\phi) \cdot (\nabla n + \epsilon n \nabla n) \right)$
 <p>
