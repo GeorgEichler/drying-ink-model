@@ -3,13 +3,13 @@ import ufl
 import numpy as np
 
 class Config:
-    def __init__(self, grid = (100,100), domain_length = 25, num_steps = 50, time_interval = 10,
+    def __init__(self, grid = (100,100), domain_length = 25, num_steps = 50, final_time = 10,
                  mu = 0.0, eps = -1, M = 0.2, sigma = 0.03, constant_phi = 0, constant_n = 0):
 
         self.grid = grid
         self.L = domain_length     #length of domain [0,L]^2
         self.num_steps = num_steps
-        self.T = time_interval
+        self.T = final_time
         self.dt = self.T/self.num_steps
         self.mu = mu
         self.eps = eps
