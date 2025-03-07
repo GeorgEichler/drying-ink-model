@@ -1,4 +1,3 @@
-import csv
 import plot_results as fh
 import config as cfg
 import numpy as np
