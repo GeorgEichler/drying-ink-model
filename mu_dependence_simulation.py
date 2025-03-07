@@ -1,5 +1,4 @@
 import TwoD_Allen_Cahn_Distribution as CA
-import plot_results as fh
 import config as cfg
 import csv
 import numpy as np
@@ -20,15 +19,14 @@ phi_init_option = "gaussian"
 # available n ic options: constant, gaussian, half_domain, two_drop
 n_init_option = "gaussian"
 
-mu_list = np.linspace(-5, 5, 50)
+mu_list = np.linspace(-5, 5, 4)
 distance_phi_list = []
 distance_n_list = []
 kullback_n_list = []
 for mu in mu_list:
     print(f"mu = {mu}")
-    config = cfg.Config(mu)
-    cahn_allen = CA.CahnAllen2D(config, 0.2, 1,
-                                phi_init_option, n_init_option, False)
+    config = cfg.Config(mu = mu)
+    cahn_allen = CA.AllenCahnInk2D(config, phi_init_option, n_init_option, False)
     _, _, distance_measure_n, distance_measure_phi, kullback_measure_n = cahn_allen.solve()
     distance_phi_list.append(distance_measure_phi)
     distance_n_list.append(distance_measure_n)
