@@ -55,10 +55,7 @@ class AllenCahnInk2D:
         self.solver_n = fe.NonlinearVariationalSolver(problem_n)
 
         if self.store_values:
-            output_dir_phi = "output/phi_solutions"
-            output_dir_n = "output/n_solutions"
-            os.makedirs(output_dir_phi, exist_ok=True)
-            os.makedirs(output_dir_n, exist_ok=True)
+            self.init_pvd_file()
 
         
     def init_pvd_file(self):
@@ -134,7 +131,7 @@ class AllenCahnInk2D:
             self.solver_n.solve()
             self.n_k.assign(self.n)
 
-            if i in self.times_to_plot:
+            if (i+1) in self.times_to_plot:
                 phi_solutions.append(self.phi.copy(deepcopy=True))
                 n_solutions.append(self.n.copy(deepcopy=True))
 
