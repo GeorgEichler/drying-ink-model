@@ -99,8 +99,8 @@ class FigureHandler:
         plt.show()
 
     @staticmethod
-    def read_csv(filename):
-        with open(filename, "r") as f:
+    def read_csv(name):
+        with open(f"{name}.csv", "r") as f:
             reader = csv.reader(f)
             return [float(row[0]) for row in reader]
         
