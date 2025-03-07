@@ -26,7 +26,7 @@ kullback_n_list = []
 for mu in mu_list:
     print(f"mu = {mu}")
     config = cfg.Config(mu = mu)
-    cahn_allen = CA.AllenCahnInk2D(config, phi_init_option, n_init_option, False)
+    cahn_allen = CA.AllenCahnInk2D(config, phi_init_option, n_init_option)
     _, _, distance_measure_n, distance_measure_phi, kullback_measure_n = cahn_allen.solve()
     distance_phi_list.append(distance_measure_phi)
     distance_n_list.append(distance_measure_n)
