@@ -1,6 +1,7 @@
 import fenics as fe
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 class FigureHandler:
 
@@ -95,4 +96,28 @@ class FigureHandler:
 
         if savefig:
             plt.savefig(f"{path}/slice_plot.png")
+        plt.show()
+
+    @staticmethod
+    def read_csv(filename):
+        with open(filename, "r") as f:
+            reader = csv.reader(f)
+            return [float(row[0]) for row in reader]
+        
+    def mu_dependence_plots(self, mu_list, path_distance_phi, path_distance_n, path_kullback_n):
+        distance_phi_list = self.read_csv(path_distance_phi)
+        distance_n_list = self.read_csv(path_distance_n)
+        kullback_n_list = self.read_csv(path_kullback_n)
+
+        plt.figure()
+        plt.plot(mu_list, distance_phi_list, label="distance\nmeasure phi")
+        plt.legend(loc="lower left")
+
+        plt.figure()
+        plt.plot(mu_list, distance_n_list, label="distance\nmeasure n")
+        plt.legend(loc="upper left")
+
+        plt.figure()
+        plt.plot(mu_list, kullback_n_list, label="kullback\nmeasure n")
+        plt.legend(loc="upper left")
         plt.show()
