@@ -119,6 +119,10 @@ class AllenCahnInk2D:
     def distance_measure(f, f_0):
         return fe.assemble((f-f_0)**2 * fe.dx)/(fe.assemble(f_0*fe.dx) * fe.assemble(f*fe.dx))        
 
+    @staticmethod
+    def normalised_distance_measure(f, f_0):
+        return fe.assemble((f - f_0)**2 * fe.dx)/( fe.assemble(f_0**2 * fe.dx) + fe.assemble(f**2 * fe.dx) )
+
     def solve(self):
         phi_solutions = [self.phi_0]
         n_solutions = [self.n_0]
