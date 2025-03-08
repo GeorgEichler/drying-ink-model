@@ -4,14 +4,18 @@ import csv
 import numpy as np
 
 """
-Solve this model for various values of eps and saves the different measures in a csv file.
+Solve this model for various values of mu and saves the different measures in a csv file.
 """
 
-def write_csv(list, name):
+def write_csv(mu_list, values_list, name):
     with open(f"{name}.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        for value in list:
-            writer.writerow([value])
+        # Write the header
+        writer.writerow(["mu", name])
+        # Write data
+        for mu, value in zip(mu_list, values_list):
+            writer.writerow([mu, value])
+
 
 # available phi ic options: constant, tanh, cosine, gaussian, sine_checkerboard, random
 phi_init_option = "gaussian"
@@ -36,6 +40,6 @@ for mu in mu_list:
 print(distance_phi_list)
 print(distance_n_list)
 print(kullback_n_list)
-write_csv(distance_phi_list, "Results/distance_phi_list")
-write_csv(distance_n_list, "Results/distance_n_list")
-write_csv(kullback_n_list, "Results/kullback_n_list")
+write_csv(mu_list, distance_phi_list, "Results/distance_phi_list")
+write_csv(mu_list, distance_n_list, "Results/distance_n_list")
+write_csv(mu_list, kullback_n_list, "Results/kullback_n_list")

@@ -100,14 +100,22 @@ class FigureHandler:
 
     @staticmethod
     def read_csv(name):
+        mu_values = []
+        data_values = []
         with open(f"{name}.csv", "r") as f:
             reader = csv.reader(f)
-            return [float(row[0]) for row in reader]
+            next(reader)  # Skip header row
+            for row in reader:
+                mu_values.append(float(row[0]))
+                data_values.append(float(row[1]))
+
+        return mu_values, data_values
+
         
-    def mu_dependence_plots(self, mu_list, path_distance_phi, path_distance_n, path_kullback_n):
-        distance_phi_list = self.read_csv(path_distance_phi)
-        distance_n_list = self.read_csv(path_distance_n)
-        kullback_n_list = self.read_csv(path_kullback_n)
+    def mu_dependence_plots(self, path_distance_phi, path_distance_n, path_kullback_n):
+        mu_list, distance_phi_list = self.read_csv(path_distance_phi)
+        _, distance_n_list = self.read_csv(path_distance_n)
+        _, kullback_n_list = self.read_csv(path_kullback_n)
 
         plt.figure()
         plt.plot(mu_list, distance_phi_list, label="distance\nmeasure phi")
