@@ -113,7 +113,7 @@ class AllenCahnInk2D:
     def kullback_leibler_divergence(f, f_0):
         f_0_normalised = f_0 / (fe.assemble(f_0 * fe.dx))
         f_normalised = f/ (fe.assemble(f * fe.dx))
-        return fe.assemble(f_0_normalised*ufl.ln(f_normalised/f_0_normalised) * fe.dx)
+        return fe.assemble(f_normalised*ufl.ln(f_normalised/f_0_normalised) * fe.dx)
 
     @staticmethod
     def distance_measure(f, f_0):
@@ -142,8 +142,8 @@ class AllenCahnInk2D:
             if self.store_values:
                 self.write_pvd_file(self.phi_k, self.n_k, t)
 
-        distance_measure_phi = self.distance_measure(self.phi, self.phi_0)
-        distance_measure_n = self.distance_measure(self.n, self.n_0)
+        distance_measure_phi = self.normalised_distance_measure(self.phi, self.phi_0)
+        distance_measure_n = self.normalised_distance_measure(self.n, self.n_0)
         kullback_leibler_n = self.kullback_leibler_divergence(self.n, self.n_0)
 
         return phi_solutions, n_solutions, distance_measure_n, distance_measure_phi, kullback_leibler_n
