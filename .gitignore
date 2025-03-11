@@ -8,7 +8,6 @@ __pycache__/
 
 #folders to hide
 output/
-Results/
 
 # Distribution / packaging
 .Python
