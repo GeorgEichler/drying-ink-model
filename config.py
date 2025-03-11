@@ -24,13 +24,13 @@ class Config:
         self.phi_options = {
             "constant": fe.Constant(self.c_phi),
             "sine_checkerboard": fe.Expression("sin(x[0])*sin(x[1])", degree=2),
-            "gaussian": fe.Expression("2*exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/10) - 1", L=self.L, degree=2),
+            "gaussian": fe.Expression("2*exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/100) - 1", L=self.L, degree=2),
             "random": self.random()
         }
 
         self.n_options = {
             "constant": fe.Constant(self.c_n),
-            "gaussian": fe.Expression("exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/10)", L=self.L, degree=2),
+            "gaussian": fe.Expression("1*exp((-pow(x[0]-L/2, 2) -pow(x[1]-L/2, 2))/100)", L=self.L, degree=2),
             "cross_gaussian": fe.Expression("0.1 * exp(-(pow(x[0] - L/2, 2) + pow(x[1] - L/2, 2))) * (exp(-pow(x[0] + x[1] - L, 2)/(2*0.1)) + exp(-pow(x[0] - x[1], 2)/(2*0.1)))",
                                     L=self.L, degree=2),
             "sine_checkerboard": fe.Expression("sin(x[0])*sin(x[1])", degree=2),
@@ -51,6 +51,6 @@ class Config:
     
     #mobility function
     def D(self, phi, n):
-        n_low_threshold = 0.5
+        n_low_threshold = 0.2
         n_high_threshold = 1
         return 0.5*(1 + ufl.tanh(10*phi)) * (1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))
