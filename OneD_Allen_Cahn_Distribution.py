@@ -2,6 +2,7 @@ import ufl
 from dolfin import *
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 
 plt.rcParams.update({
             "axes.titlesize": 18,
@@ -16,9 +17,9 @@ plt.rcParams.update({
 T = 10              # Time intervall length
 num_steps = 50      # number of time steps
 dt = T / num_steps  # time step size
-mu = 0.0            # moisture parameter
-L = 25              # domain length [0,L]
-eps = 1e-1          # how much the ink likes to be in the solvent
+mu = 0.5            # moisture parameter
+L = 50              # domain length [0,L]
+eps = -1          # how much the ink likes to be in the solvent
 alpha = 0.2*0.03    # product of evaporation coefficient (M) and surface tension (sigma)
 
 # Mesh and function space (linear Lagrange elements and 1d interval)
@@ -35,19 +36,21 @@ def random(nx):
 
 # initial conditions
 #phi_k = interpolate(Expression("0.2*tanh(x[0]-5)", degree=2), V)
-phi_k = interpolate(Expression("x[0] < L/2 ? -0.1 : 0.1", L = L, degree=1),V)
-#phi_k = interpolate(Expression("2*exp(-pow(x[0]-L/2, 2)/100)-1", L=L, degree=2), V)
+#phi_k = interpolate(Expression("x[0] < L/2 ? -0.1 : 0.1", L = L, degree=1),V)
+phi_k = interpolate(Expression("2*exp(-pow(x[0]-L/2, 2)/10)-1", L=L, degree=2), V)
 #phi_k = random(nx)
 phi_0 = phi_k.copy(deepcopy=True)
 
 #n_k = interpolate(Constant(1/L), V)
 #n_k = interpolate(Expression("x[0] < L/2 ? 0.2 : 0", L=L, degree=1), V)
-n_k = interpolate(Constant(0), V)
-#n_k = interpolate(Expression("1*exp(-pow(x[0]-L/2, 2)/100)", L=L, degree=2), V)
+#n_k = interpolate(Constant(0), V)
+n_k = interpolate(Expression("1*exp(-pow(x[0]-L/2, 2)/10)", L=L, degree=2), V)
 n_0 = n_k.copy(deepcopy=True)
 
 def D(phi):
-    return 0.5*(1 + ufl.tanh(10*phi))
+    n_low_threshold = 0.2
+    n_high_threshold = 1
+    return 0.5*(1 + ufl.tanh(10*phi))*(1 + ufl.tanh(10 * (n - n_low_threshold) * (n_high_threshold - n)))
 
 # weak formulation of problem
 phi = Function(V)
@@ -79,27 +82,29 @@ for i in range(num_steps):
     n_k.assign(n)
     iterates_n.append(n_k.copy(deepcopy=True))
 
-plt.rcParams.update({'font.size': 18})
+# Preparations for the plots
 x = mesh.coordinates().flatten()
+t = np.linspace(0, T, num_steps+1)
+X, T_grid = np.meshgrid(x, t)
 
 plotted_timesteps = [num_steps //2, num_steps]
 
-plt.subplots(1, 2, figsize = (15,9))
+plt.subplots(1, 2, figsize = (15,8))
 
 plt.subplot(1, 2, 1)
-plt.plot(x, phi_0.compute_vertex_values(), label="Initial condition")
+plt.plot(x, phi_0.compute_vertex_values(), label="t=0")
 for j in plotted_timesteps:
     plt.plot(x, iterates_phi[j].compute_vertex_values(), label=f"t={j*dt}")
 
 plt.xlim(0,L)
-plt.ylim(-1.1, 1.1)
+#plt.ylim(-1.1, 1.1)
 plt.xlabel("x")
 plt.ylabel("$\phi$")
 plt.title("Solution of 1D Allen-Cahn\n equation (order parameter)")
 plt.legend()
 
 plt.subplot(1, 2, 2)
-plt.plot(x, n_0.compute_vertex_values(), label="Initial condition")
+plt.plot(x, n_0.compute_vertex_values(), label="t=0")
 for j in plotted_timesteps:
     plt.plot(x, iterates_n[j].compute_vertex_values(), label=f"t={j*dt}")
 plt.xlim(0, L)
@@ -107,5 +112,33 @@ plt.xlabel("x")
 plt.ylabel("n")
 plt.title("Solution of 1D Allen-Cahn\n equation (distribution)")
 plt.legend()
+
+phi_values = np.array([phi.compute_vertex_values() for phi in iterates_phi])
+n_values = np.array([n.compute_vertex_values() for n in iterates_n])
+
+fig1 = plt.figure(figsize=(12,6))
+
+ax = fig1.add_subplot(111, projection = '3d')
+ax.plot_surface(X, T_grid, phi_values, color="blue")
+ax.set_xlabel('x')
+ax.set_ylabel('t')
+ax.set_zlabel('$\phi$')
+ax.set_title('Evolution of $\phi$')
+#ax.view_init(elev=30, azim=180)  # Rotate to bring x-axis to front
+ax.view_init(elev=30, azim=-90) #Rotate to bring y-axis to front
+
+fig2 = plt.figure(figsize=(12,6))
+
+ax2 = fig2.add_subplot(111, projection='3d')
+ax2.plot_surface(X, T_grid, n_values, color='grey')
+ax2.set_xlabel('x')
+ax2.set_ylabel('t')
+ax2.set_zlabel('n')
+ax2.set_title('Evolution of $n$')
+ax2.set_zlim(0,1)
+
+
+plt.tight_layout()
+
 
 plt.show()
