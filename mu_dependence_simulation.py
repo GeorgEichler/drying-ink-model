@@ -4,7 +4,7 @@ import csv
 import numpy as np
 
 """
-Solve this model for various values of mu and saves the different measures in a csv file.
+Solve this model for various values of mu and saves mu list the different measures in a csv file.
 """
 
 def write_csv(mu_list, values_list, name):
@@ -23,7 +23,7 @@ phi_init_option = "gaussian"
 # available n ic options: constant, gaussian, half_domain, two_drop
 n_init_option = "gaussian"
 
-mu_list = np.linspace(-5, 5, 4)
+mu_list = np.linspace(-1.5, 1, 41)
 distance_phi_list = []
 distance_n_list = []
 kullback_n_list = []
