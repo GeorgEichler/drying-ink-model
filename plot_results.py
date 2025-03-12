@@ -27,16 +27,17 @@ class FigureHandler:
         """
 
         solutions_path = "output"
-        phi_cmap = "RdBu_r" #colormap red (low) to blue (high)
+        phi_cmap = "RdBu" #colormap red (low) to blue (high)
         n_cmap = "gray_r"   #colormap white (low) to black (high)
 
         for k in range(len(phi_solutions)):
             plt.figure()
             c_phi = fe.plot(phi_solutions[k], mode="color")
             c_phi.set_cmap(phi_cmap)
+            c_phi.set_clim(-1.1,1.1)
             plt.xlabel("x")
             plt.ylabel("y")
-            plt.title(rf"$\phi$ at t = {round(times_to_plot[k], 2)}")
+            plt.title(rf"$\phi$ at t = {round(self.config.dt*times_to_plot[k], 2)}")
             plt.colorbar(c_phi)
             if savefig:
                 plt.savefig(f"{solutions_path}/phi_t={round(times_to_plot[k],2)}.png")
@@ -44,14 +45,15 @@ class FigureHandler:
             plt.figure()
             c_n = fe.plot(n_solutions[k], mode = "color")
             c_n.set_cmap(n_cmap)
+            c_n.set_clim(0,1)
             plt.xlabel("x")
             plt.ylabel("y")
-            plt.title(f"n at t = {round(times_to_plot[k], 2)}")
+            plt.title(f"n at t = {round(self.config.dt*times_to_plot[k], 2)}")
             plt.colorbar(c_n)
             if savefig:
                 plt.savefig(f"{solutions_path}/n_t={round(times_to_plot[k],2)}.png")
         
-        plt.show()
+        #plt.show()
 
 
     def plot_free_energy(self, free_energy_vals, savefig=False):
@@ -71,10 +73,10 @@ class FigureHandler:
         if savefig:
             plt.savefig(f"{path}/free_energy.png")
 
-        plt.show()
+        #plt.show()
 
 
-    def plot_horizontal_slice_n(self, n_solutions, times_to_plot, ycoord, num_x_points, savefig=False):
+    def plot_horizontal_slice(self, solutions, times_to_plot, ycoord, num_x_points, variable = "n",savefig=False):
         """
         Horizontal slice of the ink distribution n
         - n_solutions: ink distribution solution
@@ -87,16 +89,16 @@ class FigureHandler:
         xvals = np.linspace(0, self.config.L, num_x_points)
         n_vals = []
         plt.figure()
-        for i in range(len(n_solutions)):
-            n_vals.append([n_solutions[i](xvals[j], ycoord) for j in range(len(xvals))])
-            plt.plot(xvals, n_vals[i], label=f"t={round(times_to_plot[i], 2)}")
+        for i in range(len(solutions)):
+            n_vals.append([solutions[i](xvals[j], ycoord) for j in range(len(xvals))])
+            plt.plot(xvals, n_vals[i], label=f"t={round(self.config.dt*times_to_plot[i], 2)}")
         plt.xlabel("x")
-        plt.ylabel("n")
+        plt.ylabel(f"{variable}")
         plt.legend()
 
         if savefig:
             plt.savefig(f"{path}/slice_plot.png")
-        plt.show()
+        #plt.show()
 
     @staticmethod
     def read_csv(name):

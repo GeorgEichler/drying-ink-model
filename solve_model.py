@@ -1,14 +1,15 @@
 import TwoD_Allen_Cahn_Distribution as AC
 import config as cfg
 import plot_results as fh
+import matplotlib.pyplot as plt
 
-config = cfg.Config(mu = -0.5)
+config = cfg.Config(mu = 0, num_steps=20, final_time=5)
 
 #phi initial condition options: constant, tanh, cosine, gaussian, sine_checkerboard, random
-phi_init_option = "random"
+phi_init_option = "gaussian"
 
 #available n initial condition options: constant, gaussian
-n_init_option = "gaussian"
+n_init_option = "constant"
 
 times_to_plot = [0, config.num_steps //2, config.num_steps]
 allen_cahn = AC.AllenCahnInk2D(config, phi_init_option, n_init_option, times_to_plot, store_values = True)
@@ -23,4 +24,6 @@ save_slices = False
 
 figure_handler.plot_heatmaps(phi_solutions, n_solutions, times_to_plot, save_heatmap)
 #figure_handler.plot_free_energy(free_energy_vals, save_free_energy)
-figure_handler.plot_horizontal_slice_n(phi_solutions, times_to_plot, 12.5, 100, save_slices)
+figure_handler.plot_horizontal_slice(phi_solutions, times_to_plot, config.L/2, config.grid[0],variable = "$\phi$")
+figure_handler.plot_horizontal_slice(n_solutions, times_to_plot, config.L/2, config.grid[0], variable = "n")
+plt.show()
