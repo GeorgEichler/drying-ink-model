@@ -34,7 +34,7 @@ class AllenCahnInk2D:
         # Allen-Cahn equation for phi
         F_phi = ((self.phi - self.phi_k) / config.dt ) * self.v * fe.dx \
                 + fe.inner(fe.grad(self.phi), fe.grad(self.v)) * fe.dx \
-                - (self.phi - self.phi**3 - config.eps * self.n + config.mu) * self.v * fe.dx 
+                - (self.phi - self.phi**3 - config.eps * self.n_k + config.mu) * self.v * fe.dx 
         J_phi = fe.derivative(F_phi, self.phi)
 
         # Ink distribution diffusion equation
