@@ -116,8 +116,8 @@ class AllenCahnInk2D:
             f_normalised = f/ (fe.assemble(f * fe.dx))
             result = fe.assemble(f_normalised*ufl.ln(f_normalised/f_0_normalised) * fe.dx)
             return result
-        except ValueError as e:
-            print(f"Error {e}")
+        except ZeroDivisionError:
+            print(f"Zero Division Error")
             return None
 
     @staticmethod
@@ -125,8 +125,8 @@ class AllenCahnInk2D:
         try:
             result = fe.assemble((f-f_0)**2 * fe.dx)/(fe.assemble(f_0*fe.dx) * fe.assemble(f*fe.dx)) 
             return result
-        except ValueError as e:
-            print(f"Error {e}")
+        except ZeroDivisionError:
+            print(f"Zero Division Error")
             return None       
 
     @staticmethod
@@ -134,8 +134,8 @@ class AllenCahnInk2D:
         try:
             result = fe.assemble((f - f_0)**2 * fe.dx)/( fe.assemble(f_0**2 * fe.dx) + fe.assemble(f**2 * fe.dx) )
             return result
-        except ValueError as e:
-            print(f"Error {e}")
+        except ZeroDivisionError:
+            print(f"Zero Division Error")
             return None
 
     def solve(self):
@@ -156,9 +156,13 @@ class AllenCahnInk2D:
 
             if self.store_values:
                 self.write_pvd_file(self.phi_k, self.n_k, t)
-
-        distance_measure_phi = self.normalised_distance_measure(self.phi, self.phi_0)
-        distance_measure_n = self.normalised_distance_measure(self.n, self.n_0)
-        kullback_leibler_n = self.kullback_leibler_divergence(self.n, self.n_0)
+        if self.n_init_option != "constant":
+            distance_measure_phi = self.normalised_distance_measure(self.phi, self.phi_0)
+            distance_measure_n = self.normalised_distance_measure(self.n, self.n_0)
+            kullback_leibler_n = self.kullback_leibler_divergence(self.n, self.n_0)
+        else:
+            distance_measure_phi = None
+            distance_measure_n = None
+            kullback_leibler_n = None
 
         return phi_solutions, n_solutions, distance_measure_n, distance_measure_phi, kullback_leibler_n
