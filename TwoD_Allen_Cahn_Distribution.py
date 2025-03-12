@@ -111,17 +111,32 @@ class AllenCahnInk2D:
 
     @staticmethod
     def kullback_leibler_divergence(f, f_0):
-        f_0_normalised = f_0 / (fe.assemble(f_0 * fe.dx))
-        f_normalised = f/ (fe.assemble(f * fe.dx))
-        return fe.assemble(f_normalised*ufl.ln(f_normalised/f_0_normalised) * fe.dx)
+        try:
+            f_0_normalised = f_0 / (fe.assemble(f_0 * fe.dx))
+            f_normalised = f/ (fe.assemble(f * fe.dx))
+            result = fe.assemble(f_normalised*ufl.ln(f_normalised/f_0_normalised) * fe.dx)
+            return result
+        except ValueError as e:
+            print(f"Error {e}")
+            return None
 
     @staticmethod
     def distance_measure(f, f_0):
-        return fe.assemble((f-f_0)**2 * fe.dx)/(fe.assemble(f_0*fe.dx) * fe.assemble(f*fe.dx))        
+        try:
+            result = fe.assemble((f-f_0)**2 * fe.dx)/(fe.assemble(f_0*fe.dx) * fe.assemble(f*fe.dx)) 
+            return result
+        except ValueError as e:
+            print(f"Error {e}")
+            return None       
 
     @staticmethod
     def normalised_distance_measure(f, f_0):
-        return fe.assemble((f - f_0)**2 * fe.dx)/( fe.assemble(f_0**2 * fe.dx) + fe.assemble(f**2 * fe.dx) )
+        try:
+            result = fe.assemble((f - f_0)**2 * fe.dx)/( fe.assemble(f_0**2 * fe.dx) + fe.assemble(f**2 * fe.dx) )
+            return result
+        except ValueError as e:
+            print(f"Error {e}")
+            return None
 
     def solve(self):
         phi_solutions = [self.phi_0]
